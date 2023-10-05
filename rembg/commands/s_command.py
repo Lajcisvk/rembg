@@ -200,6 +200,7 @@ def s_command(port: int, log_level: str, threads: int) -> None:
             ),
             media_type="image/png",
         )
+# dokku config:set rembg-preview OMP_NUM_THREADS=8
 
     @app.on_event("startup")
     def startup():
@@ -208,11 +209,12 @@ def s_command(port: int, log_level: str, threads: int) -> None:
         except Exception:
             pass
 
+        print(threads)
         if threads is not None:
             from anyio import CapacityLimiter
             from anyio.lowlevel import RunVar
 
-            RunVar("_default_thread_limiter").set(CapacityLimiter(threads))
+            print(RunVar("_default_thread_limiter").set(CapacityLimiter(threads)))
 
     @app.get(
         path="/api/remove",
